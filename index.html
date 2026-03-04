@@ -1,0 +1,83 @@
+w<!DOCTYPE html>
+<html>
+    <head>
+        <title>typing speed test</title>
+    </head>
+    <body>
+        <center>
+        <section>
+            <h1><mark>Typing Speed Test</mark></h1>
+            <abbr title="typing speed test">TST</abbr>
+            <button command = 'show-modal' commandfor="dialoge">explaination</button>
+            <dialog id ='dialoge'>
+                <p>So this typing test works when u write the sentence identical to the sentence provided and it wont give u the results even if the diffrence is just an uppercase character</p>
+                <button commandfor = 'dialoge' command = 'close'>close</button>
+            </dialog>
+            
+        </section>
+        <div>
+           <h2 id="sentence"></h2>
+        </div>
+        <textarea  id="input" rows="6" cols="200"></textarea>
+        <p>Time : <strong><span id="timer">0</span></strong> seconds </p>
+        <p id ="result"></p>
+        <p id = 'error'></p>
+        <footer>
+            <button onclick="restartTest()">Restart</button>
+            <small><p><em>Try to type as fast as possible!</em></p></small>
+            
+        </footer>
+        </center>
+                <script>
+            const sentence = ["The old apple revels in its authority", "unexpected breeze disturbs the afternoon silence" , "The crow scavenged for the loose corn kernels flying through the ionic sea of plastic cups and paper plates", "Abstraction is often one floor above you" , "The cat slept", "sunshine feels warm", "I love coffee", "birds fly high", "read a book", "time flies fast", "sky is blue", "drink more water", "stars are shining", "walk the dog"]
+            let randomSentence =   sentence[Math.floor(Math.random()*sentence.length)];
+            document.getElementById('sentence').textContent=randomSentence;
+            let startTime;
+            let TimeInterval;
+            let isTyping = false;
+            const input = document.getElementById("input");
+            input.addEventListener("input",function(){
+                if(!isTyping){
+                    isTyping = true ;
+                    startTime = new Date();
+                    TimeInterval = setInterval(updateTimer , 1000);
+                }
+                if (input.value === randomSentence)
+                {
+                    finishTest();   
+                }
+                else if (input!= randomSentence && input.length >= randomSentence.length )
+                {
+                    document.getElementById('error').textContent='u might have an error there buddy , check ur spelling';
+                }
+            });
+            function updateTimer(){
+                const currentTime = new Date();
+                const seconds = Math.floor((currentTime - startTime)/1000);
+                document.getElementById("timer").textContent = seconds;
+            }
+            function finishTest() {
+                clearInterval(TimeInterval);
+
+                const endTime = new Date();
+                const totalTime = (endTime-startTime)/1000;
+
+                const words = randomSentence.split("").length;
+                const wpm = Math.round((words/totalTime)*10);
+                document.getElementById("result").textContent="Your speed is "+wpm+" wpm" ; 
+            }
+            function restartTest(){
+                clearInterval(TimeInterval);
+                input.value='';
+                document.getElementById('timer').textContent=0;
+                document.getElementById('input').textContent='';
+                wpm = 0;
+                document.getElementById('result').textContent="Your speed is "+wpm+" wpm" ;
+                isTyping=false ;
+
+            randomSentence =   sentence[Math.floor(Math.random()*sentence.length)];
+            document.getElementById('sentence').textContent=randomSentence;
+            }
+        </script>
+    </body> 
+</html>
